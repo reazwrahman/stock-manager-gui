@@ -1,10 +1,15 @@
 package stock.manager.ui.components_factory;
 
+import stock.manager.ui.stock_manager.Stock;
 import stock.manager.ui.stock_manager.StockSorter;
+import stock.manager.ui.stock_manager.StockWithPrice;
 import stock.manager.ui.stock_manager.backend.DisplayHelper;
+import stock.manager.ui.utility.OutputWriter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AnalysisDisplay extends AbstractGUIComponent implements GUIComponentIF {
 
@@ -79,6 +84,10 @@ public class AnalysisDisplay extends AbstractGUIComponent implements GUIComponen
     public void sortByTotalGain() {
         updatePanel(API_CALL_MESSAGE);
         updatePanel(displayHelper.getTotalGainString());
+    }
+
+    public void saveOutput(){
+        OutputWriter.writeStocksWithPrice(displayHelper.getReturnRateRaw());
     }
 
 }

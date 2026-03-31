@@ -33,6 +33,11 @@ public class AnalyzeDecorator extends AbstractMenuDecorator {
         m_menu.add(menuItem);
         menuItem.addActionListener(new AnalyzeDecorator.SortByTotalCostListener());
 
+        menuItem = new JMenuItem("Save Output");
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK));
+        m_menu.add(menuItem);
+        menuItem.addActionListener(new AnalyzeDecorator.SaveOutputListener());
+
     }
 
     protected void setAccelerator() {
@@ -60,6 +65,14 @@ public class AnalyzeDecorator extends AbstractMenuDecorator {
         public void actionPerformed(ActionEvent e) {
             AnalysisDisplay analysisDisplay = (AnalysisDisplay) m_appBuilder.getPanel(StockAppBuilder.ANALYSIS_TAB);
             analysisDisplay.sortByTotalCost();
+        }
+    }
+
+    private class SaveOutputListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            AnalysisDisplay analysisDisplay = (AnalysisDisplay) m_appBuilder.getPanel(StockAppBuilder.ANALYSIS_TAB);
+            analysisDisplay.saveOutput();
         }
     }
 }

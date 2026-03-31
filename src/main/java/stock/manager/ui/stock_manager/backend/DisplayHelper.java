@@ -31,6 +31,18 @@ public class DisplayHelper {
         }
     }
 
+    public List<StockWithPrice> getReturnRateRaw(){
+        m_stockSorter.loadData();
+        try {
+            RequestModel request = new RequestModel(ACCESS_KEY, m_stockSorter.getSortedData());
+            ResponseModel response = m_backend.sortByReturnRate(request);
+            return response.stocks;
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public String getTotalGainString() {
         m_stockSorter.loadData();
         try {
