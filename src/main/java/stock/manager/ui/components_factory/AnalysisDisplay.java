@@ -87,7 +87,17 @@ public class AnalysisDisplay extends AbstractGUIComponent implements GUIComponen
     }
 
     public void saveOutput(){
-        OutputWriter.writeStocksWithPrice(displayHelper.getReturnRateRaw());
+        String message = null;
+        try {
+            OutputWriter.writeStocksWithPrice(displayHelper.getReturnRateRaw());
+            message = "Output saved successfully!";
+        } catch (Exception ex) {
+            message = "Something went wrong, please try again.";
+        }
+        JOptionPane.showMessageDialog(null,
+                message,
+                "Confirmation",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
 }
