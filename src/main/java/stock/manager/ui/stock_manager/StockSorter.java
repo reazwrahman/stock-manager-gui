@@ -17,9 +17,10 @@ public class StockSorter {
     public void loadData() {
         m_sortedData = new ArrayList<>();
         Map<String, Map<String, String>> rawData = m_fileHandler.readStockEntries();
-        for (String ticker : rawData.keySet()) {
-            Float quantity = Float.parseFloat(rawData.get(ticker).get("quantity"));
-            Float totalCost = Float.parseFloat(rawData.get(ticker).get("totalCost"));
+        for (String id : rawData.keySet()) {
+            String ticker = rawData.get(id).get("ticker");
+            Float quantity = Float.parseFloat(rawData.get(id).get("quantity"));
+            Float totalCost = Float.parseFloat(rawData.get(id).get("totalCost"));
             Stock stock = new Stock(ticker, quantity, totalCost);
             m_sortedData.add(stock);
         }
