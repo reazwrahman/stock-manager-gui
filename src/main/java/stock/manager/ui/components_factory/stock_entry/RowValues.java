@@ -7,6 +7,7 @@ class RowValues {
     public String ticker;
     public String qty;
     public String cost;
+    public String source;
 
     public RowValues(JPanel panel) {
         try {
@@ -14,6 +15,7 @@ class RowValues {
             ticker = ((JTextField) panel.getComponent(2)).getText();
             qty = ((JTextField) panel.getComponent(4)).getText();
             cost = ((JTextField) panel.getComponent(6)).getText();
+            source = ((JTextField) panel.getComponent(8)).getText();
         } catch (Exception ex) {
             throw new IllegalArgumentException("Inputted panel can not be converted to row values");
         }

@@ -17,10 +17,12 @@ public class StockSorter {
     public void loadData() {
         m_sortedData = new ArrayList<>();
         Map<String, Map<String, String>> rawData = m_fileHandler.readStockEntries();
-        for (String ticker : rawData.keySet()) {
-            Float quantity = Float.parseFloat(rawData.get(ticker).get("quantity"));
-            Float totalCost = Float.parseFloat(rawData.get(ticker).get("totalCost"));
-            Stock stock = new Stock(ticker, quantity, totalCost);
+        for (String id : rawData.keySet()) {
+            String ticker = rawData.get(id).get("ticker");
+            Float quantity = Float.parseFloat(rawData.get(id).get("quantity"));
+            Float totalCost = Float.parseFloat(rawData.get(id).get("totalCost"));
+            String source = rawData.get(id).get("source");
+            Stock stock = new Stock(ticker, quantity, totalCost, source);
             m_sortedData.add(stock);
         }
 
@@ -40,23 +42,24 @@ public class StockSorter {
 
         // Title block
         builder.append(String.format("Stock Data (Sorted by %s)\n", Stock.m_comparator));
-        builder.append("=================================================\n");
+        builder.append("===========================================================\n");
 
         // Header row
         builder.append("\n");
-        builder.append(String.format("%-4s %-15s %-15s %-15s\n", " ", "Ticker", "Quantity", "TotalCost"));
+        builder.append(String.format("%-4s %-15s %-15s %-15s %-15s\n", " ", "Ticker", "Quantity", "TotalCost", "Source"));
 
         // Separator
-        builder.append("=================================================\n");
+        builder.append("===========================================================\n");
 
         // Data rows
         for (int i = m_sortedData.size() - 1; i >= 0; i--) {
             Stock stock = m_sortedData.get(i);
-            builder.append(String.format("%-4d %-15s %-15s %-15s\n",
+            builder.append(String.format("%-4d %-15s %-15s %-15s %-15s\n",
                     (m_sortedData.size() - i),
                     stock.m_ticker,
                     String.format("%.2f", stock.m_quantity),
-                    String.format("%.2f", stock.m_totalCost)));
+                    String.format("%.2f", stock.m_totalCost),
+                    stock.m_source));
         }
 
         return builder.toString();

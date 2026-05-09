@@ -93,11 +93,13 @@ public class StockEntryPanel extends AbstractGUIComponent
         JLabel label1 = new JLabel("Ticker");
         JLabel label2 = new JLabel("Quantity");
         JLabel label3 = new JLabel("Total Cost");
+        JLabel label4 = new JLabel("Source");
         Dimension textFieldSize = new Dimension(100, 25);
         label0.setPreferredSize(textFieldSize);
         label1.setPreferredSize(textFieldSize);
         label2.setPreferredSize(textFieldSize);
         label3.setPreferredSize(textFieldSize);
+        label4.setPreferredSize(textFieldSize);
 
         panel.add(label0);
         panel.add(Box.createHorizontalStrut(20)); // Gap between fields
@@ -106,6 +108,8 @@ public class StockEntryPanel extends AbstractGUIComponent
         panel.add(label2);
         panel.add(Box.createHorizontalStrut(55));
         panel.add(label3);
+        panel.add(Box.createHorizontalStrut(55));
+        panel.add(label4);
 
         // Wrap the panel in a top-aligned container
         JPanel topAlignedPanel = new JPanel();
@@ -116,12 +120,13 @@ public class StockEntryPanel extends AbstractGUIComponent
     }
 
     public void fillStockEntry() {
-        for (String ticker : m_stockMap.keySet()) {
+        for (String id : m_stockMap.keySet()) {
             PanelRow row = addStockEntry();
-            row.ticker.setText(ticker);
+            row.ticker.setText(m_stockMap.get(id).get("ticker"));
             row.ticker.setEditable(true);
-            row.qty.setText(m_stockMap.get(ticker).get("quantity"));
-            row.cost.setText(m_stockMap.get(ticker).get("totalCost"));
+            row.qty.setText(m_stockMap.get(id).get("quantity"));
+            row.cost.setText(m_stockMap.get(id).get("totalCost"));
+            row.source.setText(m_stockMap.get(id).get("source"));
         }
     }
 
@@ -142,6 +147,8 @@ public class StockEntryPanel extends AbstractGUIComponent
         stockPanel.add(row.qty);
         stockPanel.add(Box.createHorizontalStrut(10));
         stockPanel.add(row.cost);
+        stockPanel.add(Box.createHorizontalStrut(10));
+        stockPanel.add(row.source);
         stockPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 
         // Wrap the panel in a top-aligned container
@@ -191,7 +198,7 @@ public class StockEntryPanel extends AbstractGUIComponent
     @Override
     public String validateInput() {
         java.awt.Component[] components = m_panel.getComponents();
-        Set<String> stockSeen = new HashSet<>();
+        int stockCount  = 0;
 
         if (components.length > STOCK_PANEL_STARTS_AT) {
             for (int i = STOCK_PANEL_STARTS_AT; i < components.length; i += DELTA_BETWEEN_STOCK_PANEL) {
@@ -204,11 +211,7 @@ public class StockEntryPanel extends AbstractGUIComponent
                 }
 
                 String ticker = rowValues.ticker.strip().toUpperCase();
-
-                if (stockSeen.contains(ticker)) {
-                    return "Duplicate Stock not allowed: " + ticker;
-                }
-                stockSeen.add(ticker);
+                stockCount++;
 
                 try {
                     Float quantity = Float.parseFloat(rowValues.qty);
@@ -219,7 +222,7 @@ public class StockEntryPanel extends AbstractGUIComponent
 
             }
         }
-        if (stockSeen.isEmpty()) {
+        if (stockCount == 0) {
             return "Nothing to save, add a stock by clicking the Add button";
         }
         return "";
@@ -244,6 +247,7 @@ public class StockEntryPanel extends AbstractGUIComponent
     private void saveEntries() {
         java.awt.Component[] components = m_panel.getComponents();
         m_stockMap = new HashMap<>();
+        int stockId = 1;
 
         if (components.length > STOCK_PANEL_STARTS_AT) {
             for (int i = STOCK_PANEL_STARTS_AT; i < components.length; i += DELTA_BETWEEN_STOCK_PANEL) {
@@ -251,7 +255,8 @@ public class StockEntryPanel extends AbstractGUIComponent
                 JPanel parentPanel = (JPanel) components[i];
                 JPanel panel = (JPanel) parentPanel.getComponent(0);
                 RowValues rowValues = new RowValues(panel);
-                insertToMap(rowValues.ticker.toUpperCase(), rowValues.qty, rowValues.cost);
+                insertToMap(stockId, rowValues.ticker.toUpperCase(), rowValues.qty, rowValues.cost, rowValues.source);
+                stockId++;
             }
             writeToJson();
             reset();
@@ -263,7 +268,7 @@ public class StockEntryPanel extends AbstractGUIComponent
         }
     }
 
-    private void insertToMap(String ticker, String quantity, String cost) {
+    private void insertToMap(int stockId, String ticker, String quantity, String cost, String source) {
         Map<String, String> innerMap = new HashMap<>();
         if (Float.parseFloat(quantity) == 0 && Float.parseFloat(cost) == 0) { // remove this stock if applicable, or don't enter at all
             if (m_stockMap.get(ticker) != null) {
@@ -271,9 +276,11 @@ public class StockEntryPanel extends AbstractGUIComponent
             }
             return;
         }
+        innerMap.put("ticker", ticker);
         innerMap.put("quantity", quantity);
         innerMap.put("totalCost", cost);
-        m_stockMap.put(ticker, innerMap);
+        innerMap.put("source", source);
+        m_stockMap.put(Integer.toString(stockId), innerMap);
     }
 
     private void writeToJson() {

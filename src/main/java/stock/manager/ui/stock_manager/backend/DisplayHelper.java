@@ -64,22 +64,23 @@ public class DisplayHelper {
 
         // Header row
         builder.append("\n");
-        builder.append("+------+--------------+--------------+--------------+--------------+--------------+--------------+\n");
-        builder.append(String.format("| %-4s | %-12s | %-12s | %-12s | %-12s | %-12s | %-12s |\n", "", "Ticker", "Quantity", "Cost", "Price", "Gain", "Return Rate"));
-        builder.append("+------+--------------+--------------+--------------+--------------+--------------+--------------+\n");
+        builder.append("+------+--------------+--------------+--------------+--------------+--------------+--------------+--------------+\n");
+        builder.append(String.format("| %-4s | %-12s | %-12s | %-12s | %-12s | %-12s | %-12s | %-12s |\n", "", "Ticker", "Quantity", "Cost", "Price", "Gain", "Return Rate", "Source"));
+        builder.append("+------+--------------+--------------+--------------+--------------+--------------+--------------+--------------+\n");
 
 
         // Data rows
         for (int i = 0; i < stocks.size(); i++) {
             StockWithPrice stock = stocks.get(i);
-            builder.append(String.format("%-4s %-15s %-15s %-15s %-15s %-15s %-15s\n",
+            builder.append(String.format("%-4s %-15s %-15s %-15s %-15s %-15s %-15s %-15s\n",
                     (i + 1),
                     stock.ticker,
                     String.format("%.2f", stock.quantity),
                     String.format("%.2f", stock.totalCost),
                     String.format("%.2f", stock.price),
                     String.format("%.2f", stock.totalGain),
-                    String.format("%.2f", stock.returnRate)
+                    String.format("%.2f", stock.returnRate),
+                    stock.source
             ));
         }
 

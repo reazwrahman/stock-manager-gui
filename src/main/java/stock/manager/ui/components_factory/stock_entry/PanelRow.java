@@ -9,6 +9,7 @@ class PanelRow {
     public JTextField ticker;
     public JTextField qty;
     public JTextField cost;
+    public JTextField source;
 
     public PanelRow(String count) {
         counter = new JLabel(count);
@@ -16,13 +17,16 @@ class PanelRow {
         ticker = new JTextField();
         qty = new JTextField();
         cost = new JTextField();
+        source = new JTextField();
         Dimension textFieldSize = new Dimension(100, 25);
         ticker.setPreferredSize(textFieldSize);
         qty.setPreferredSize(textFieldSize);
         cost.setPreferredSize(textFieldSize);
+        source.setPreferredSize(textFieldSize);
 
         ticker.setMaximumSize(textFieldSize); // Restrict maximum size
         qty.setMaximumSize(textFieldSize);
         cost.setMaximumSize(textFieldSize);
+        source.setMaximumSize(textFieldSize);
     }
 }
