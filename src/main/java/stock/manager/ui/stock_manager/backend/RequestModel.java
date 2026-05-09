@@ -12,11 +12,13 @@ class StockStringified {
     public String ticker;
     public String quantity;
     public String totalCost;
+    public String source;
 
-    public StockStringified(String ticker, String quantity, String totalCost) {
+    public StockStringified(String ticker, String quantity, String totalCost, String source) {
         this.ticker = ticker;
         this.quantity = quantity;
         this.totalCost = totalCost;
+        this.source = source;
     }
 }
 
@@ -38,7 +40,7 @@ public class RequestModel {
         List<StockStringified> result = new ArrayList<>();
         for (Stock stock : stocks) {
             result.add(new StockStringified(stock.m_ticker, Float.toString(stock.m_quantity),
-                    Float.toString(stock.m_totalCost)));
+                    Float.toString(stock.m_totalCost), stock.m_source));
         }
         return result;
     }
