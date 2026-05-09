@@ -6,11 +6,13 @@ public class Stock implements Comparable<Stock> {
     public String m_ticker;
     public Float m_quantity;
     public Float m_totalCost;
+    public String m_source;
 
-    public Stock(String ticker, Float quantity, Float totalCost) {
+    public Stock(String ticker, Float quantity, Float totalCost, String source) {
         m_ticker = ticker;
         m_quantity = quantity;
         m_totalCost = totalCost;
+        m_source = source;
     }
 
 
