@@ -7,6 +7,7 @@ public class StockWithPrice {
     public BigDecimal quantity;
     public BigDecimal totalCost;
     public BigDecimal cost;
+    public String source;
 
     public BigDecimal price;
     public BigDecimal totalGain;
